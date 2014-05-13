@@ -23,7 +23,7 @@ public class AlarmActivity extends Activity {
 	private MyAlarm alarm;
 	private Intent intent;
 	private TextView time;
-	private Long millis = 0l;
+	private Long millis;
 	private int hour;
 	private int minute;
 	private Switch state;
@@ -52,8 +52,10 @@ public class AlarmActivity extends Activity {
 			public void onClick(View v) {
 				TimePickedAdapter adapter = new TimePickedAdapter();
 				Log.d("OnclicTime", "Clicked");
-				new TimePickerDialog(AlarmActivity.this, adapter, hour, minute,
-						true).show();
+				TimePickerDialog dialog = new TimePickerDialog(
+						AlarmActivity.this, adapter, hour, minute, true);
+				dialog.setIcon(R.drawable.ic_launcher);
+				dialog.show();
 
 			}
 
@@ -70,10 +72,10 @@ public class AlarmActivity extends Activity {
 				if (!state.isChecked()) {
 					try {
 						cancelRepeatingTimer();
-						getSharedPreferences(
-								"SaveActivityState", 0).edit().remove("IsEnabled").commit();
+						getSharedPreferences("SaveActivityState", 0).edit()
+								.remove("IsEnabled").commit();
 					} catch (CanceledException e) {
-						
+
 						e.printStackTrace();
 					}
 				}
@@ -87,15 +89,15 @@ public class AlarmActivity extends Activity {
 
 		@Override
 		public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfDay) {
-			millis = (long) ((Math.abs(TimeManager.hoursManage(hour, hourOfDay)) * 3600000) + (Math
+			millis = (long) ((Math
+					.abs(TimeManager.hoursManage(hour, hourOfDay)) * 3600000) + (Math
 					.abs(TimeManager.minutesManage(minute, minuteOfDay)) * 60000));
-			time.setText("" + hourOfDay + ":" + TimeManager.timeCorrector(minuteOfDay));
+			time.setText("" + hourOfDay + ":"
+					+ TimeManager.timeCorrector(minuteOfDay));
 			Log.d("dd", "" + millis);
 
 		}
 	}
-
-
 
 	public void startRepeatingTimer(View view) throws CanceledException {
 
